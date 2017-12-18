@@ -1,0 +1,24 @@
+In the home directory of the user bandit3, type ls:
+
+~$ ls
+inhere
+
+Enter the directory inhere:
+
+~$ cd inhere && ls
+
+We see no output from ls. Let's try using the find
+command to see whether there is a hidden file:
+
+~/inhere$ find . -name *
+.
+./.hidden
+
+As seen, there is a hidden file with special chars.
+Cat the file to get the password. As similar to previous
+challenges, use quotes to avoid special char problems:
+
+~/inhere$ cat "./.hidden"
+pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+
+Using the password above, ssh to the user bandit4.

@@ -1,0 +1,43 @@
+In the home directory of the user bandit4, type ls:
+
+~$ ls
+inhere
+
+Change to that directory:
+
+~$ cd inhere && ls
+-file00  -file02  -file04  -file06  -file08
+-file01  -file03  -file05  -file07  -file09
+
+As we see, there are 10 files all of whose name starts
+with a special character. In the challenge website,
+we are given the information that only one of these
+files contain human-readable information, which is the
+password for the level 5. Thus, if we print all the
+files, we can see the human-readable output.
+
+~/inhere$ for file in $(ls); do cat -- $file; echo ' '; done
+Ԡ4�gg,��e��w���6����~�2)�k2� 
+�0_܉��  ���5!���:!O}&�WW
+                          ;2�Q 
+.�A���~������@���S4�Wr��(_����! 
+���S�6��A�u�e[
+iF�ӲdX��-���X�d{ 
+Y�sl)�`��ck���)��ۓ����Ǣ2r�<j 
+�,|�E��L��������~�����ED���v�� 
+�LMuU�D�����J;4j]��9��PIj� 
+koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+ 
+��fӡ'��<��t�vk�qH@��^.�?6)g 
+utBB�s�����l������e ��z��x��� 
+
+As we see above, we can read only one of the output, and it
+is the password for the user bandit5. Now, ssh to bandit5.
+
+Note that in the command we used above, we add -- after cat
+since all the filenames starts with - (dash character), which
+is a special character. Prepending -- to those filenames, we
+can cancel out the effect of the special character, which is
+normally used to pass options for the commands. Moreover,
+we actually don't need the echo ' ' part; however, it makes
+the output of the for-loop look nicer.

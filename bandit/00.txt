@@ -1,0 +1,5 @@
+To pass the level 0, enter the following command:
+
+~$ ssh bandit0@bandit.labs.overthewire.org -p 2220
+
+When you are asked for the password, enter: bandit0

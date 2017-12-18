@@ -1,0 +1,13 @@
+In the home directory of the user bandit2, type ls:
+
+~$ ls
+spaces in this filename
+
+Since there are space characters in the filename, we
+cannot directly write its name in the terminal. Instead,
+we should use single or double quotes:
+
+~$ cat "spaces in this filename"
+UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+
+Using the password above, ssh to the user bandit3.

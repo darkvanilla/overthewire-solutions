@@ -1,0 +1,21 @@
+In the home directory of the user bandit1, first create
+a tmp directory to work on:
+
+~$ mktemp -d
+/tmp/tmp.ppRl7SMDJW
+
+Change your working directory to the above directory:
+
+~$ cd /tmp/tmp.ppRl7SMDJW
+
+Now, since the name of the file is the dash character,
+i.e., '-', which is a special character, we cannot open
+the file in a straightforward manner. However, we
+can change the name of the file to be able to open it,
+while copying it to our current directory:
+
+/tmp/tmp.ppRl7SMDJW$ cp ~/- ./readable.txt && cat readable.txt
+CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+
+Using the above password, ssh to the user bandit2, as 
+similar to the previous challenges.

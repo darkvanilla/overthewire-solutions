@@ -1,0 +1,45 @@
+In the home directory of the user bandit5, enter:
+
+~$ ls
+inhere
+
+Change to that directory:
+
+~$ cd inhere && ls
+maybehere00  maybehere04  maybehere08  maybehere12  maybehere16
+maybehere01  maybehere05  maybehere09  maybehere13  maybehere17
+maybehere02  maybehere06  maybehere10  maybehere14  maybehere18
+maybehere03  maybehere07  maybehere11  maybehere15  maybehere19
+
+We have 20 directories, and probably much more files.
+So, we cannot manually check all of them. In the website of
+the challenge, we learn that the password is stored in a file,
+which is:
+    
+    human-readable
+    1033 bytes in size
+    not executable
+
+Using these properties, we can find the file with the find
+command. Reading the manual of the find command:
+
+~/inhere$ man find
+
+We can search for terms "readable" and "size" to find which
+options specify those. From the man page, we learn the option
+-readable finds the human-readable files, and the option
+-size finds files with special sizes. In particular, we should
+use the following command:
+
+~/inhere$ find . -type f -readable -size 1033c
+./maybehere07/.file2
+
+We found the file! If the search returned more files, we could
+also use the "not executable" feature to improve the search.
+
+Get the contents of the file:
+
+~/inhere$ cat ./maybehere07/.file2
+DXjZPULLxYr17uwoI01bNLQbtFemEgo7
+
+Use the above password to ssh to the user bandit6.

@@ -1,0 +1,12 @@
+In the home directory for the user bandit0, you will
+find a document named "readme":
+
+~$ ls
+readme
+
+Read the document contents:
+
+~$ cat readme
+boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+
+Using the above password, ssh to user bandit1, similar to level 0.
