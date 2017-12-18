@@ -1,0 +1,15 @@
+In the home directory of the user bandit8, type:
+
+~$ ls
+data.txt
+
+Again, we have a file composed of many things. In the
+challenge website, we are informed that the password is
+the only line of the text that occurs only once. Thus,
+we can use the <sort> and <uniq> commands to find that
+line:
+
+~$ sort data.txt | uniq -u
+UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+
+Use the above password to ssh to bandit9.

@@ -1,0 +1,26 @@
+In the home directory of the user bandit11, type ls:
+
+~$ ls
+data.txt
+
+We again have some data from which we should obtain the
+password. In the challenge website, we see that it is
+encoded using ROT13. So, let's see the encoded version:
+
+~$ cat data.txt
+Gur cnffjbeq vf 5Gr8L4qetPEsPk8htqjhRK8XSP6x2RHh
+
+Now, we can use <tr> to translate all characters to
+their original positions (by shifting 13 positions):
+
+~$ data.txt | tr '[A-Za-z]' '[N-ZA-Mn-za-m]'
+The password is 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+
+Using the above password, ssh to the user bandit12.
+
+Note that <tr>'s first argument is the set of chars
+that are to be translated, and they are the uppercase
+chars A-Z, and the lowercase chars a-z. In the second
+argument, we tell <tr> to convert [A-Z] to [N-Z] union [A-M],
+and convert [a-z] to [n-z] union [a-m]. [E.g.: A -> N,
+Z -> M, b -> o, etc.]

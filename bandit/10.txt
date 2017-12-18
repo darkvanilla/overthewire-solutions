@@ -1,0 +1,38 @@
+In the home directory of the user bandit9, type ls:
+
+~$ ls
+data.txt
+
+Again, we have a large data among which we should find
+the password. Looking at the challenge website, we are
+informed that the password is one of the few human-
+readable strings in data.txt, and it begins with several
+'=' characters. So, we can use <strings> to get the
+human-readable strings from the file, and use <sort> and
+<uniq> commands to reduce the number of outputs. Moreover,
+we can use <grep> command to find the lines containing
+a '=' character:
+
+~$ strings data.txt | sort | uniq | grep '='
+)========== truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+4H5=
+=/wW
+========== is
+========== password
+========== theOkM
+=GUl
+=hrV`
+>]".x=
+H)=QU
+L=8@
+e=y:
+{=jh
+{=u/,i_
+~BX=
+
+As seen above, the first line of the output looks like
+promising. Using that password, i.e.;
+
+truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+
+we are able to ssh to the user bandit10.

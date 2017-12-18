@@ -1,0 +1,30 @@
+In the home directory of the user bandit7, type:
+
+~$ ls
+data.txt
+
+In the website, we see that the password for level 8
+can be found next to the word "millionth". To see
+the data format of the "data.txt", let's use head:
+
+~$ head data.txt
+lactation's tK4YQ0PpL8lPuylFfW7MopEgb5wUuMMo
+vicars  llMtntl6PXOWTPtmP5VE0p7Cy5bp6f7T
+desiderata  srZXFhVueP9rUYk8tw3LahQSfCnAKM7m
+definition  VNBPbu65fzO1tzLC8k1FLgFNKK9V0g65
+carjack NyndREZL6yLZiUTo8ZlQZnq4XeM1lWsc
+Dave    Xh94PxKRjJ386UBLuIMBY3HXsdSrqzXL
+blowgun's   Heiot8rSnSwWEQRpFBx5Slgf7L5yoPIE
+emasculating    VFfsCj84H7cx0qhPpjhJF2ZvckOcjPsg
+seating's   y2pAsz7aPRidqcFFUj6egwPqdIYsJnC7
+rebuked zp1YCm0UeWytkWmoZfL7B11PqbES1qKV
+
+It seems like for each line, there's a word and
+a string composed of random readable characters. Thus,
+we can simply use grep to find the word "millionth" and
+the password next to it:
+
+~$ grep millionth data.txt
+millionth   cvX2JJa4CFALtqS87jk27qwqGhBM9plV
+
+So, we now have the password. Use it to ssh to bandit8.

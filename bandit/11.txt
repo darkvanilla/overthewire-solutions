@@ -1,0 +1,13 @@
+In the home directory of the user bandit10, type ls:
+
+~$ ls
+data.txt
+
+Again, we have some data in which we need to find the
+password. In the website, we see that it contains
+base64-encoded data. So, we can decode it as follows:
+
+~$ base64 -d data.txt
+The password is IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+
+Using that password, ssh to the user bandit11.
