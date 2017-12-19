@@ -1,0 +1,11 @@
+This time, we need to send the password of the user bandit14
+to the port 30000 on localhost to get the password for this
+level.
+
+On the user bandit14, type:
+
+~$ nc localhost 30000 < /etc/bandit_pass/bandit14
+Correct!
+BfMYroe26WYalil77FoDi9qh59eK5xNr
+
+Using the password above, ssh to the user bandit15.

@@ -1,0 +1,158 @@
+In this level, we need to send the password of bandit15 to
+the port 30001 on localhost, using SSL encryption. Thus,
+we need to do the following, on the user bandit15:
+
+~$ openssl s_client -connect localhost:30001 < /etc/bandit_pass/bandit15
+CONNECTED(00000003)
+depth=0 CN = bandit
+verify error:num=18:self signed certificate
+verify return:1
+depth=0 CN = bandit
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=bandit
+   i:/CN=bandit
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIICsjCCAZqgAwIBAgIJAOiKeDKsXb/8MA0GCSqGSIb3DQEBCwUAMBExDzANBgNV
+BAMMBmJhbmRpdDAeFw0xNzExMTEyMDA1MTJaFw0yNzExMDkyMDA1MTJaMBExDzAN
+BgNVBAMMBmJhbmRpdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM94
+fvfAy+PhF9WCKwCmMccdSooUfl2xTxwJ7l6tE9/uMc43CeCskmUhp6B5VQB5yVqs
+nLBmDpBaDN66XqlzGTyB9gEDELOtYsX20Y48Sd7t/OY3xSV/uIkv+hU10lKSMPd/
+khxVjoVdebWoTJkwOz6HX0AvaTbDSRG6oBJ4m99ssNZXGymDjENXESkNeOuxKkGH
+wIlb6oNLdNTnVWcDtQF6bIofS8v6dRHykKekQ4y9ml7/FzhQJlTMymfSo48GgbNf
+PWs8KMHMoCSs9byWXHs5OUScqXdC6aC7onRNODSv1/gZiwBFIjvq8+nlj7P8XgTy
+OqsPvIz+FAS8EvcXH0cCAwEAAaMNMAswCQYDVR0TBAIwADANBgkqhkiG9w0BAQsF
+AAOCAQEAxD1vr08ahuVDmr3/CHuQUX7w/K3pevWJcjh8xd3Zxbv4WdIEXMrIBMHI
+lcmTW2z7ZqcEfnCgbqWjY7Dy1N1JN7fvkUDpJhEdYPzdr6XHlSAO+oqEy27J94xl
+a8hwBJg+euFrJ5jwIU7hZqsEWppNm0uZofSlOWcue3q7V8e7dcJWo6lArPjtMWWD
+DG2DPDNBIuWktcrQj6eT28Voxjn6iM2ivUWJqsvFSpQ/xwionp8A3ZfiagJKGt/C
+4I1QAOqIGVLqOCP+vAjB2utsRP51vXxAeEDu/3hE9Azk/Ap0Z3Nb8XrLSNyfUUm/
+oi8cAsr0CunA8qK/B6cVEHm6837xIQ==
+-----END CERTIFICATE-----
+subject=/CN=bandit
+issuer=/CN=bandit
+---
+No client certificate CA names sent
+---
+SSL handshake has read 1015 bytes and written 631 bytes
+---
+New, TLSv1/SSLv3, Cipher is AES128-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : AES128-SHA
+    Session-ID: AB0CAA74272B2538CD4930E78E12A562166937F39A21F683B2C067492CA6AAFA
+    Session-ID-ctx: 
+    Master-Key: 7848C1ECC06B5E3AA5D4A375BD73135B8CD6CB8926183B0FA8D2FF717DCF47A370E58F0D439F0B3EBF78A37215A6A3D0
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 8d 8d 08 76 bd 8b dc 4e-f1 f1 6b ed 03 44 22 c5   ...v...N..k..D".
+    0010 - b3 38 a2 b8 58 f6 7a 2f-64 db c1 a1 b2 77 d5 b8   .8..X.z/d....w..
+    0020 - 5e 67 c2 90 88 05 cc e2-9f 57 b1 84 f4 11 b1 33   ^g.......W.....3
+    0030 - dd 64 50 1e 28 79 ee d6-a6 ff 99 c1 c8 e9 f0 aa   .dP.(y..........
+    0040 - e7 01 91 78 48 ac f3 06-b4 e2 be b4 ae 04 50 79   ...xH.........Py
+    0050 - c7 80 e0 50 c5 18 03 e4-6a 16 6e a0 39 28 1a 13   ...P....j.n.9(..
+    0060 - 11 d6 38 89 b2 f1 20 0e-92 ce e2 d7 0a df 5d 60   ..8... .......]`
+    0070 - 28 71 4d 21 d4 30 58 f4-3e 4d 29 cb 1c 1e 37 0e   (qM!.0X.>M)...7.
+    0080 - 25 70 53 2f b4 cb a7 7f-1e 2a bd df fa 7d 7c f7   %pS/.....*...}|.
+    0090 - 7c c1 e2 14 81 da a0 a6-51 33 dc c3 81 0a 9b 07   |.......Q3......
+
+    Start Time: 1513658230
+    Timeout   : 300 (sec)
+    Verify return code: 18 (self signed certificate)
+---
+HEARTBEATING
+DONE
+
+We are connected, but having a problem of HEARTBEATING. To
+overcome this issue, we can use -ign_eof:
+
+~$ openssl s_client -connect localhost:30001 < /etc/bandit_pass/bandit15 -ign_eof
+CONNECTED(00000003)
+depth=0 CN = bandit
+verify error:num=18:self signed certificate
+verify return:1
+depth=0 CN = bandit
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=bandit
+   i:/CN=bandit
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIICsjCCAZqgAwIBAgIJAOiKeDKsXb/8MA0GCSqGSIb3DQEBCwUAMBExDzANBgNV
+BAMMBmJhbmRpdDAeFw0xNzExMTEyMDA1MTJaFw0yNzExMDkyMDA1MTJaMBExDzAN
+BgNVBAMMBmJhbmRpdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM94
+fvfAy+PhF9WCKwCmMccdSooUfl2xTxwJ7l6tE9/uMc43CeCskmUhp6B5VQB5yVqs
+nLBmDpBaDN66XqlzGTyB9gEDELOtYsX20Y48Sd7t/OY3xSV/uIkv+hU10lKSMPd/
+khxVjoVdebWoTJkwOz6HX0AvaTbDSRG6oBJ4m99ssNZXGymDjENXESkNeOuxKkGH
+wIlb6oNLdNTnVWcDtQF6bIofS8v6dRHykKekQ4y9ml7/FzhQJlTMymfSo48GgbNf
+PWs8KMHMoCSs9byWXHs5OUScqXdC6aC7onRNODSv1/gZiwBFIjvq8+nlj7P8XgTy
+OqsPvIz+FAS8EvcXH0cCAwEAAaMNMAswCQYDVR0TBAIwADANBgkqhkiG9w0BAQsF
+AAOCAQEAxD1vr08ahuVDmr3/CHuQUX7w/K3pevWJcjh8xd3Zxbv4WdIEXMrIBMHI
+lcmTW2z7ZqcEfnCgbqWjY7Dy1N1JN7fvkUDpJhEdYPzdr6XHlSAO+oqEy27J94xl
+a8hwBJg+euFrJ5jwIU7hZqsEWppNm0uZofSlOWcue3q7V8e7dcJWo6lArPjtMWWD
+DG2DPDNBIuWktcrQj6eT28Voxjn6iM2ivUWJqsvFSpQ/xwionp8A3ZfiagJKGt/C
+4I1QAOqIGVLqOCP+vAjB2utsRP51vXxAeEDu/3hE9Azk/Ap0Z3Nb8XrLSNyfUUm/
+oi8cAsr0CunA8qK/B6cVEHm6837xIQ==
+-----END CERTIFICATE-----
+subject=/CN=bandit
+issuer=/CN=bandit
+---
+No client certificate CA names sent
+---
+SSL handshake has read 1015 bytes and written 631 bytes
+---
+New, TLSv1/SSLv3, Cipher is AES128-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : AES128-SHA
+    Session-ID: E1B47478D0A4B191ABA05CBF92552C42DE56B9BA24EF1F5F3CEFCC72DF238EBC
+    Session-ID-ctx: 
+    Master-Key: B6366306BB4EECDC9DA661B6E91ADE198898EA76C8F7569805532A7789DAB7AE90B6C4ACC76ED611F738CF1647823DD9
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 8d 8d 08 76 bd 8b dc 4e-f1 f1 6b ed 03 44 22 c5   ...v...N..k..D".
+    0010 - ec 02 39 0d be a9 ed 8c-71 1b 51 34 d7 3b 5b cb   ..9.....q.Q4.;[.
+    0020 - bc dd bb 31 74 ca 2b b2-fd b0 cf 92 e6 8f 23 f1   ...1t.+.......#.
+    0030 - c1 9f c9 2c fe 4f 16 d2-af 3d fc 07 b3 bf de 4b   ...,.O...=.....K
+    0040 - d8 58 ca 64 78 3f 2f f4-0a cc 2b e1 ce 4f 2e d9   .X.dx?/...+..O..
+    0050 - 4f 1c 61 ba 9e 1d d6 c7-89 85 2d 9d 12 4b 29 e0   O.a.......-..K).
+    0060 - b3 ab 72 2f c6 ea d4 2e-3a b5 dc d7 ce 37 e0 f8   ..r/....:....7..
+    0070 - 42 fb af 94 a6 e6 c6 e9-99 b8 6a b0 6b 43 f1 46   B.........j.kC.F
+    0080 - 21 ac ff 26 c6 90 b6 48-d9 83 47 cb 9b e7 25 9d   !..&...H..G...%.
+    0090 - 87 39 c4 8a fc e8 cd 8c-9c 80 e1 0e 0d fa 34 4f   .9............4O
+
+    Start Time: 1513658252
+    Timeout   : 300 (sec)
+    Verify return code: 18 (self signed certificate)
+---
+Correct!
+cluFn7wTiGryunymYOu4RcffSxQluehd
+
+closed
+
+Now, we have the password: cluFn7wTiGryunymYOu4RcffSxQluehd
+
+Using that, ssh to the user bandit16.

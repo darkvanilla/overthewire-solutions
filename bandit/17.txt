@@ -1,0 +1,207 @@
+In this level, we are given the information that we need
+to submit the password of bandit16 to a port on localhost
+in the range 31,000 to 32,000. We need to find the only port 
+among those, which is open, can speak SSL, and give the password.
+
+Let's start by a port scan using <nmap>:
+
+~$ nmap localhost -p 31000-32000
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2017-12-19 05:46 CET
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00011s latency).
+Other addresses for localhost (not scanned): ::1
+Not shown: 996 closed ports
+PORT      STATE SERVICE
+31046/tcp open  unknown
+31518/tcp open  unknown
+31691/tcp open  unknown
+31790/tcp open  unknown
+31960/tcp open  unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 0.07 seconds
+
+As seen above, there are only 5 open ports in the given
+range. Now, we need to find the ones that can speak SSL:
+
+~$ openssl s_client -connect localhost:31046 | grep "no peer certificate"
+140737354045080:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:s23_clnt.c:794:
+no peer certificate available
+
+~$ openssl s_client -connect localhost:31518 | grep "no peer certificate"
+depth=0 CN = bandit
+verify error:num=18:self signed certificate
+verify return:1
+depth=0 CN = bandit
+verify return:1
+^C
+
+~$ openssl s_client -connect localhost:31691 | grep "no peer certificate"
+140737354045080:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:s23_clnt.c:794:
+no peer certificate available
+
+~$ openssl s_client -connect localhost:31790 | grep "no peer certificate"
+depth=0 CN = bandit
+verify error:num=18:self signed certificate
+verify return:1
+depth=0 CN = bandit
+verify return:1
+^C
+
+~$ openssl s_client -connect localhost:31960 | grep "no peer certificate"
+140737354045080:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:s23_clnt.c:794:
+no peer certificate available
+
+As seen above, trying to connect those 5 ports using SSL tells that
+"no peer certificates" available if the server does not run SSL; thus,
+we can grep this and eliminate those found. We see that only two
+ports did not return that message, which are the ports 31,518 and
+31,790. So, our target is one of these ports.
+
+Now, let us try sending the password file to see which one will
+return the password:
+
+~$ openssl s_client -connect localhost:31790 -ign_eof < /etc/bandit_pass/bandit16
+CONNECTED(00000003)
+depth=0 CN = bandit
+verify error:num=18:self signed certificate
+verify return:1
+depth=0 CN = bandit
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=bandit
+   i:/CN=bandit
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIICsjCCAZqgAwIBAgIJAOiKeDKsXb/8MA0GCSqGSIb3DQEBCwUAMBExDzANBgNV
+BAMMBmJhbmRpdDAeFw0xNzExMTEyMDA1MTJaFw0yNzExMDkyMDA1MTJaMBExDzAN
+BgNVBAMMBmJhbmRpdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM94
+fvfAy+PhF9WCKwCmMccdSooUfl2xTxwJ7l6tE9/uMc43CeCskmUhp6B5VQB5yVqs
+nLBmDpBaDN66XqlzGTyB9gEDELOtYsX20Y48Sd7t/OY3xSV/uIkv+hU10lKSMPd/
+khxVjoVdebWoTJkwOz6HX0AvaTbDSRG6oBJ4m99ssNZXGymDjENXESkNeOuxKkGH
+wIlb6oNLdNTnVWcDtQF6bIofS8v6dRHykKekQ4y9ml7/FzhQJlTMymfSo48GgbNf
+PWs8KMHMoCSs9byWXHs5OUScqXdC6aC7onRNODSv1/gZiwBFIjvq8+nlj7P8XgTy
+OqsPvIz+FAS8EvcXH0cCAwEAAaMNMAswCQYDVR0TBAIwADANBgkqhkiG9w0BAQsF
+AAOCAQEAxD1vr08ahuVDmr3/CHuQUX7w/K3pevWJcjh8xd3Zxbv4WdIEXMrIBMHI
+lcmTW2z7ZqcEfnCgbqWjY7Dy1N1JN7fvkUDpJhEdYPzdr6XHlSAO+oqEy27J94xl
+a8hwBJg+euFrJ5jwIU7hZqsEWppNm0uZofSlOWcue3q7V8e7dcJWo6lArPjtMWWD
+DG2DPDNBIuWktcrQj6eT28Voxjn6iM2ivUWJqsvFSpQ/xwionp8A3ZfiagJKGt/C
+4I1QAOqIGVLqOCP+vAjB2utsRP51vXxAeEDu/3hE9Azk/Ap0Z3Nb8XrLSNyfUUm/
+oi8cAsr0CunA8qK/B6cVEHm6837xIQ==
+-----END CERTIFICATE-----
+subject=/CN=bandit
+issuer=/CN=bandit
+---
+No client certificate CA names sent
+---
+SSL handshake has read 1015 bytes and written 631 bytes
+---
+New, TLSv1/SSLv3, Cipher is AES128-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : AES128-SHA
+    Session-ID: CE0A80A6428EE1CB89F09BC803CAD2C54E662A945EA83DBAEB95F6CB645F3757
+    Session-ID-ctx: 
+    Master-Key: A282084B8C4B8F552F8D917B79884440FAC9556AAB930D29C09EA0C4FA85D0535465F2093409135641BC211D2E3A8CBE
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 31 f1 1b 09 19 40 e7 c3-01 fc 88 c3 a9 ce 1d 4f   1....@.........O
+    0010 - 96 bf 47 5b b0 f1 fa e3-c0 94 0b ad 08 12 7a 98   ..G[..........z.
+    0020 - e2 f7 91 ad 14 f8 38 2a-a9 09 4e 5b 5c 26 d2 24   ......8*..N[\&.$
+    0030 - c2 be 7a 14 0e 51 1e ff-34 c0 15 c0 68 e7 22 2d   ..z..Q..4...h."-
+    0040 - 22 94 c1 9d d4 1d 98 d4-83 0b 97 71 f9 c5 30 5c   "..........q..0\
+    0050 - a7 25 31 4c 74 ac 9e da-f0 ce 7e 7a bb 9b 8b 8c   .%1Lt.....~z....
+    0060 - 7d d9 89 6c e1 18 56 82-3b 57 c1 4c 21 11 38 83   }..l..V.;W.L!.8.
+    0070 - 59 f8 fe c3 62 e2 f7 0d-7a d7 0d d0 2a 4a a4 06   Y...b...z...*J..
+    0080 - b6 e5 ad 9d 45 c3 52 56-4f 3c 1d 8d cc f3 55 a2   ....E.RVO<....U.
+    0090 - cb e1 f4 1d 59 e4 6b 91-c5 59 bf 5d a2 73 a2 b9   ....Y.k..Y.].s..
+
+    Start Time: 1513659438
+    Timeout   : 300 (sec)
+    Verify return code: 18 (self signed certificate)
+---
+Correct!
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+closed
+
+Now, we got the RSA private key for bandit17, so don't need to
+try the other port. Use it to ssh to bandit17, by first
+creating a file on your local machine with your favorite text
+editor, and copying this part:
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+Save the file with any name, e.g.: bandit17. Then, <ssh> requires
+the private key file to be unreadable to others; otherwise, you
+will get an error while trying to connect. To change the file
+permissions accordingly, do the following on your local machine:
+
+~$ chmod 600 bandit17
+
+Now, you can ssh to the user bandit17:
+
+~$ ssh bandit17@bandit.labs.overthewire.org -p 2220 -i bandit17

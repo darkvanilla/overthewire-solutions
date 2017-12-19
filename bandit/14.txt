@@ -1,0 +1,21 @@
+In the home directory of the user bandit13, type ls:
+
+~$ ls
+sshkey.private
+
+We now have a private SSH key, different than the previous
+challenges. Looking at the challenge website, we see that the
+password for this level is stored at /etc/bandit_pass/bandit14,
+and can only be read by user bandit14. So, we need to
+use the SSH key to connect to the user bandit14:
+
+~$ ssh bandit14@localhost -i sshkey.private
+
+Now, we are connected to the user bandit14! Let's read the
+password:
+
+~$ cat /etc/bandit_pass/bandit14
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+Using the above password, ssh from your local machine to the
+user bandit14.
