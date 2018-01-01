@@ -1,0 +1,22 @@
+In user bandit17, send a command over ssh in order to be able to
+give commands before ssh automatically exits:
+
+bandit17@bandit:~$ cd /home/bandit18
+bandit17@bandit:/home/bandit18$ ssh bandit18@localhost 'cat readme' 
+The authenticity of host 'localhost (127.0.0.1)' can't be established.
+ECDSA key fingerprint is SHA256:98UL0ZWr85496EtCRkKlo20X3OPnyPSB5tB5RPbhczc.
+Are you sure you want to continue connecting (yes/no)? yes
+Failed to add the host to the list of known hosts (/home/bandit17/.ssh/known_hosts).
+This is a OverTheWire game server. More information on http://www.overthewire.org/wargames
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0640 for '/home/bandit17/.ssh/id_rsa' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "/home/bandit17/.ssh/id_rsa": bad permissions
+bandit18@localhost's password: 
+IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+
+As seen above, we are able to read the file "readme". Using the password seen
+above, ssh to the user bandit19.

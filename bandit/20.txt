@@ -1,0 +1,20 @@
+In the home directory of the user bandit19, type ls:
+
+~$ ls
+bandit20-do
+
+We now see an executable. The challenge website tells us that we
+can use this executable to run commands as if we are the user
+bandit20. Let's see what it outputs if we run it without any args:
+
+~$ ./bandit20-do
+Run a command as another user.
+  Example: ./bandit20-do id
+
+Since the password file is under /etc/bandit_pass directory, let's
+try opening it with this executable:
+
+~$ ./bandit20-do cat /etc/bandit_pass/bandit20 
+GbKksEFF4yrVs6il55v6gwY5aVje5f0j
+
+Voila! Use this password to ssh to the user bandit20.

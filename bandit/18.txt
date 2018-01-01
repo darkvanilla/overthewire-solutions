@@ -1,0 +1,21 @@
+In the home directory of the user bandit17, type ls:
+
+~$ ls
+passwords.new   passwords.old
+
+As seen, we have 2 passwords files. In the challenge website,
+we are informed that the password is in the file passwords.new,
+and it is the only line that does not appear in passwords.old.
+Thus, we can use <diff> to get the password for this level:
+
+~$ diff passwords.new passwords.old
+42c42
+< kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+---
+> 6vcSC74ROI95NqkKaeEC2ABVMDX9TyUr
+
+So, our password for the user bandit18 is:
+
+kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+
+Use this password to ssh to user bandit18.
