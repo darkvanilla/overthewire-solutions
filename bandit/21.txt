@@ -1,0 +1,39 @@
+Type ls in the home directory of bandit20:
+
+~$ ls
+suconnect
+
+This is the setuid binary that we need to use. We should create a server
+port that listens for incoming connections to connect to this binary
+program. To do so, we can use <screen>, but its permissions does not
+allow us to use it. However, we are not hopeless. We can also use
+<tmux> instead of <screen>:
+
+~$ tmux
+
+Now, we are inside the tmux screen. Let us now create a window to be 
+able to run 2 independent processes (one server, one client for the setuid
+binary). To do so, press [CTRL + B] and then [C]. Notice the window numbers
+on the bottom. Now, we have 2 windows, and can switch back and forward by
+pressing [CTRL + B] and then [N] (next), or [CTRL + B] and then [P] (previous).
+
+On the first window, let us create a netcat listener that will send
+the bandit20's password when there's a connection:
+
+~$ echo -n "GbKksEFF4yrVs6il55v6gwY5aVje5f0j" | nc -l -p 4444
+
+Now, let us switch to the second window on tmux, and use the program:
+
+~$ ./suconnect 4444
+Read: GbKksEFF4yrVs6il55v6gwY5aVje5f0j
+Password matches, sending next password
+
+Perfect, it sent the password! Let us look at the first window to see it.
+
+~$ echo -n "GbKksEFF4yrVs6il55v6gwY5aVje5f0j" | nc -l -p 4444
+gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
+~$
+
+Yes, we received the password: gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
+
+Using the password above, ssh to the user bandit21.

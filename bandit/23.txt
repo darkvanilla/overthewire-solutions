@@ -1,0 +1,44 @@
+Let us look at the contents of the directed folder:
+
+~$ ls /etc/cron.d
+cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  popularity-contest
+
+We need to read bandit23's cronjob file:
+
+~$ cat /etc/cron.d/cronjob_bandit23
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+
+Okay, so we again have a shell script. Let us read it:
+
+~$ cat /usr/bin/cronjob_bandit23.sh 
+#!/bin/bash
+
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+cat /etc/bandit_pass/$myname > /tmp/$mytarget
+
+As seen, the script gets the username as <myname>, which is <bandit23>.
+Then, it gets a md5sum (the MD5 hash), and cuts the result so as to
+remove the clutter. Then, copies the password into the /tmp/ folder
+with the name given as this MD5 hash. So, let us find the MD5 hash of
+the sentence "I am user bandit23":
+
+~$ echo "I am user bandit23" | md5sum | cut -d ' ' -f 1
+8ca319486bfbbc3663ea0fbe81326349
+
+Then, look at the /tmp/ folder to see whether we have a filename with
+this MD5 hash:
+
+~$ ls /tmp/8ca319486bfbbc3663ea0fbe81326349
+/tmp/8ca319486bfbbc3663ea0fbe81326349
+
+Great! We have the file. Let us read its contents:
+
+~$ cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
+
+So the password of bandit23 is: jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n

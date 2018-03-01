@@ -1,0 +1,29 @@
+As directed, let us look at the folder /etc/cron.d/:
+
+~$ ls /etc/cron.d
+cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  popularity-contest
+
+Since we are on the level bandit22, let us inspect it:
+
+~$ cat /etc/cron.d/cronjob_bandit22
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+So, it seems like bandit22 executes a shell script at each reboot,
+stored at the above address. Let us see the script:
+
+~$ cat /usr/bin/cronjob_bandit22.sh
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+So, we see that the script writes the password of bandit22, stored in
+the folder bandit_pass, to a temp file. Let us see whether we could
+read it:
+
+~$ cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+
+So, the password is: Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+
+Using that, ssh to the user bandit22.

