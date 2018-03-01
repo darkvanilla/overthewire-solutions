@@ -1,0 +1,41 @@
+Upon listing the home directory, we see an sshkey file:
+
+~$ ls
+bandit26.sshkey
+
+However, when we connect using the file
+
+~$ ssh -i bandit26.sshkey bandit26@localhost
+
+we immediately get disconnected. Let us see the type of shell
+bandit26 uses:
+
+~$ cat /etc/passwd | grep bandit26
+bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
+
+Interesting. Let us look what /showtext program does:
+
+~$ cat /usr/bin/showtext
+#!/bin/sh
+
+export TERM=linux
+
+more ~/text.txt
+exit 0
+
+As seen, it runs the command <more> and exits immediately. So, it seems
+like there is not much things that we can do at this point. However, we
+can maybe make use of <more> command, which does not exit immediately if the
+text it shows does not fit to the screen. Let us try to resize our screen,
+so that the logo shown does not fit.
+
+Now, it seems that we are still in the <more> program. This is good. At
+this point, we should somehow be able to run commands from <more>. Doing
+some research, we learn that we can enter to Vim by pressing [v] in <more>.
+Doing so, we are now in Vim.
+
+At this point, we can tell Vim to show the password of bandit26:
+
+:e /etc/bandit_pass/bandit26
+
+Voila! We obtain the password of bandit26: 5czgV9L3Xx8JPOyRbXh6lQbmIOWvPT6Z
