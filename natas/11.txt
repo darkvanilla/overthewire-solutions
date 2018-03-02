@@ -1,0 +1,45 @@
+In navas10, we have the same search property as the level before.
+However, this time, the input gets filtered. We will again perform
+command injection; but escaping certain characters.
+
+Let us inspect the source code by clicking the link for viewing it.
+We have the following extra code, apart from the previous level:
+
+if($key != "") {
+    if(preg_match('/[;|&]/',$key)) {
+        print "Input contains an illegal character!";
+    } else {
+        passthru("grep -i $key dictionary.txt");
+    }
+}
+
+So, inspecting the preg_match part, we have the regular expression
+that prohibits the use of the characters ';', '|', and '&'. Thus,
+we cannot use the previous command injection string.
+
+One of the things we can do is to make use of the grep command
+itself. We could call the <grep> command on the password file, and
+use '#' to ignore the <dictionary.txt>. However, to be able to get
+the password, we should be able to match a character that is in
+the password. We can try brute-forcing, however, it probably won't
+take too much time to find a character that is in the password
+manually as we know the general pattern for the passwords. Let us
+try it manually first, by entering this into the input field:
+
+a /etc/natas_webpass/natas11 #
+
+So that we search for 'a' in the password, and return whole the
+password if there is the character.
+
+We don't get any output. Let us continue trying with b, c, etc.
+As expected, when we try with 'c', it works:
+
+c /etc/natas_webpass/natas11 #
+
+Output:
+U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK
+
+So, the credentials are:
+
+Username: natas11
+Password: U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK

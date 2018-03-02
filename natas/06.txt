@@ -1,0 +1,33 @@
+In natas5, we see the following response:
+
+Access disallowed. You are not logged in
+
+So, let us inspect what is going on with Burp Suite. Looking at the
+HTTP GET parameters, we see the following:
+
+GET /index.php HTTP/1.1
+Host: natas5.natas.labs.overthewire.org
+User-Agent: (...)
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Cookie: loggedin=0
+Authorization: Basic bmF0YXM1OmlYNklPZm1wTjdBWU9RR1B3dG4zZlhwYmFKVkpjSGZx
+Connection: close
+Upgrade-Insecure-Requests: 1
+DNT: 1
+
+As seen, we have a Cookie this time, and it says "loggedin=0". This
+is probably why we are getting that message. Since 0 probably means
+"False", let us change it to 1 so it becomes "True", by sending the
+request to the Repeater.
+
+Doing so, on the right pane of the Repeater, we see the following
+response:
+
+Access granted. The password for natas6 is aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1
+
+So, the credentials are:
+
+Username: natas6
+Password: aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1

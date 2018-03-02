@@ -1,0 +1,34 @@
+In natas2, viewing the source code of the webpage, this time
+we don't see any HTML comments. However, there is an image
+included, which is suspicious:
+
+<div id="content">
+There is nothing on this page
+<img src="files/pixel.png">
+</div>
+
+Clicking the image, we see it is just a white 1x1 pixel. Thus,
+probably this is a hint to us. Noticing the image source, i.e.,
+files/pixel.png, we see there is a folder named "files". Let
+us try browsing there:
+
+http://natas2.natas.labs.overthewire.org/files/.
+
+We are able to see the contents of the folder. And there is a
+.txt file apart from the pixel.png, which is "users.txt". Let us
+click on that:
+
+http://natas2.natas.labs.overthewire.org/files/users.txt
+
+# username:password
+alice:BYNdCesZqW
+bob:jw2ueICLvT
+charlie:G5vCxkVV3m
+natas3:sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14
+eve:zo4mJWyNj2
+mallory:9urtcpzBmH
+
+There we go. We have the credentials for the next level:
+
+Username: natas3
+Password: sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14

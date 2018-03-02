@@ -1,0 +1,54 @@
+In natas6, we are asked for a secret in a submit form. We also
+have the option to view the page source by clicking the link on the
+website, and we see the following in the HTML body:
+
+<?
+
+include "includes/secret.inc";
+
+    if(array_key_exists("submit", $_POST)) {
+        if($secret == $_POST['secret']) {
+        print "Access granted. The password for natas7 is <censored>";
+    } else {
+        print "Wrong secret";
+    }
+    }
+?>
+
+<form method=post>
+Input secret: <input name=secret><br>
+<input type=submit name=submit>
+</form>
+
+The above part is a PHP code fragment, where the webpage is told to
+print "Access granted. ..." if an HTTP POST parameter "submit" exists,
+and if the $secret variable is equal to the POST parameter "secret".
+In other words, we should send the correct secret through the form.
+
+Notice that in the PHP code part, the variable $secret should be defined
+before checked against the thing we send. However, it seems like it
+was not defined. On the other hand, the <include> statement could be
+defining it. So, let us try browsing to the file that the PHP code
+includes:
+
+http://natas6.natas.labs.overthewire.org/includes/secret.inc
+
+We just have a blank page. But let us view the page source.
+
+view-source:http://natas6.natas.labs.overthewire.org/includes/secret.inc
+
+<?
+$secret = "FOEIUWGHFEEUHOFUOIU";
+?>
+
+as we predicted, the variable $secret is defined here. So, we should
+enter this variable's value, i.e.; FOEIUWGHFEEUHOFUOIU to the input form.
+
+Upon doing so, we get the following message:
+
+Access granted. The password for natas7 is 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9 
+
+So, the credentials are:
+
+Username: natas7
+Password: 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9

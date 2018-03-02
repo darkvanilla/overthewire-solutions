@@ -1,0 +1,34 @@
+In natas3, viewing the source code, we see an interesting HTML
+comment:
+
+<div id="content">
+There is nothing on this page
+<!-- No more information leaks!! Not even Google will find it this time... -->
+</div>
+
+Wow! "Not even Google will find it this time..." This looks like
+a hint to us. If a search engine could not find a thing, it is most
+probably because it is directed to do so by "robots.txt". Let us
+check it:
+
+http://natas3.natas.labs.overthewire.org/robots.txt
+
+User-agent: *
+Disallow: /s3cr3t/
+
+Yes, the website disallows the folder /s3cr3t to be indexed by the
+search engines. Let us try entering there:
+
+http://natas3.natas.labs.overthewire.org/s3cr3t/
+
+We again see the contents of the folder, and the file "users.txt".
+Let us open the file:
+
+http://natas3.natas.labs.overthewire.org/s3cr3t/users.txt
+
+natas4:Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ
+
+Voila! So, the credentials are:
+
+Username: natas4
+Password: Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ

@@ -1,0 +1,11 @@
+In natas0, view the page source (simply click right, and choose "View
+page source", in most browsers).
+
+You will encounter an HTML comment:
+
+<!--The password for natas1 is gtVrDuiDfck831PqWsLEZy5gyDz1clto -->
+
+So, the next level credentials are:
+
+Username: natas1
+Password: gtVrDuiDfck831PqWsLEZy5gyDz1clto
